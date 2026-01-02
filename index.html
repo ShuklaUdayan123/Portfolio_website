@@ -110,7 +110,7 @@
             padding-left: 50vw;
             transform: translateX(0);
             z-index: 5;
-            pointer-events: none; /* Allows click-through to BG, but blocks children unless re-enabled */
+            pointer-events: none; 
         }
 
         /* --- SECTIONS --- */
@@ -150,7 +150,7 @@
             color: #fff;
             backdrop-filter: blur(10px);
             clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
-            pointer-events: auto; /* Re-enables clicking for this element */
+            pointer-events: auto;
         }
 
         .hologram-header {
@@ -194,7 +194,6 @@
             align-items: center;
             text-align: center;
             
-            /* CRITICAL FIX: Re-enable pointer events so buttons work */
             pointer-events: auto; 
         }
 
@@ -205,7 +204,7 @@
             border-radius: 50%;
             background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.7) 60%, #000 100%);
             z-index: 1;
-            pointer-events: none; /* Ensure overlay doesn't block clicks */
+            pointer-events: none;
         }
 
         .signal-content-center {
@@ -244,7 +243,7 @@
             font-size: 1rem; 
             cursor: pointer;
             position: relative;
-            z-index: 100; /* Force buttons to be on top */
+            z-index: 100;
         }
         .contact-btn-small:hover { 
             background: var(--vengeance-red); 
@@ -446,6 +445,7 @@
                             <a href="mailto:shuklaudayan2001@gmail.com" class="contact-btn-small">EMAIL</a>
                             <a href="https://leetcode.com/u/shuklaudayan2001/" target="_blank" class="contact-btn-small">LEETCODE</a>
                             <a href="https://www.linkedin.com/in/udayan-shukla-b0b57819a/" target="_blank" class="contact-btn-small">LINKEDIN</a>
+                            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="contact-btn-small">TWITTER</a>
                         </div>
                     </div>
                 </div>
