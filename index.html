@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udayan Shukla | The Gotham Drive</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    
+    <style>
+        :root {
+            --vengeance-red: #ff0000;
+            --neon-red: #ff3333;
+            --road-grey: #1a1a1a;
+            --text-color: #e0e0e0;
+            --hud-bg: rgba(0,0,0,0.9);
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: var(--text-color);
+            font-family: 'Courier Prime', monospace;
+            overflow-x: hidden; 
+        }
+
+        body {
+            overflow-y: scroll; 
+            cursor: crosshair;
+            user-select: none;
+        }
+
+        /* --- LAYERS --- */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('assets/images/batman-bg.jpg') no-repeat center center/cover;
+            filter: brightness(0.4) grayscale(0.8);
+            transform: scale(1.1);
+            z-index: -3;
+        }
+
+        .flashlight-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, transparent 10%, rgba(0,0,0,0.98) 35%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        #blast-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 200; 
+            opacity: 0;
+            transition: opacity 0.1s;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,165,0,0.8) 40%, rgba(255,0,0,0) 70%);
+        }
+        .trigger-blast { animation: explosion-anim 0.4s ease-out; }
+        @keyframes explosion-anim { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 0; transform: scale(1.1); } }
+
+        /* --- SCROLL TRACK --- */
+        .scroll-track {
+            height: 7000px; 
+            width: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: -999;
+            pointer-events: none;
+        }
+
+        /* --- VIEWPORT --- */
+        .viewport {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .fog-layer-world {
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.9), transparent 40%, rgba(0,0,0,0.9));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .world-container {
+            position: absolute;
+            top: 0; left: 0; height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 50vw;
+            transform: translateX(0);
+            z-index: 5;
+            pointer-events: none; /* Allows click-through to BG, but blocks children unless re-enabled */
+        }
+
+        /* --- SECTIONS --- */
+        .section-marker {
+            min-width: 600px;
+            margin-right: 400px;
+            position: relative;
+            opacity: 0.3;
+            transform: scale(0.8);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .section-marker.active {
+            opacity: 1;
+            transform: scale(1);
+            filter: drop-shadow(0 0 20px rgba(255,0,0,0.2));
+        }
+
+        .hero-title {
+            font-family: 'Anton', sans-serif; 
+            font-size: 6rem; 
+            color: #fff; 
+            margin: 0; 
+            line-height: 0.9;
+        }
+
+        .hero-subtitle-text {
+            font-size: 1.5rem; 
+            color: var(--vengeance-red);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .hologram-panel {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid #333;
+            border-left: 5px solid var(--vengeance-red);
+            padding: 40px;
+            color: #fff;
+            backdrop-filter: blur(10px);
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+            pointer-events: auto; /* Re-enables clicking for this element */
+        }
+
+        .hologram-header {
+            font-family: 'Anton', sans-serif;
+            font-size: 3rem;
+            color: var(--vengeance-red);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255,0,0,0.5);
+        }
+
+        .hologram-sub {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        .data-point { margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .data-label { color: var(--vengeance-red); font-weight: bold; font-size: 0.9rem; }
+        .skill-chip { background: rgba(255,0,0,0.1); border: 1px solid var(--vengeance-red); color: var(--vengeance-red); padding: 5px 15px; font-size: 0.8rem; display: inline-block; margin: 3px; }
+
+        .project-link { display: block; text-decoration: none; color: inherit; transition: all 0.2s; margin-bottom: 15px; }
+        .project-link .data-point { border-bottom: 1px solid #444; transition: background 0.2s, padding-left 0.2s; }
+        .project-link:hover .data-point { background: rgba(255, 0, 0, 0.1); padding-left: 10px; border-left: 3px solid var(--vengeance-red); }
+        .project-link:hover .data-label { text-shadow: 0 0 5px var(--vengeance-red); }
+
+        /* --- CIRCULAR SPOTLIGHT SIGNAL SECTION --- */
+        .signal-circular-container {
+            position: relative;
+            width: 700px;
+            height: 700px; 
+            border-radius: 50%; 
+            background: url('assets/images/signal-scene.jpg') no-repeat center center / cover;
+            border: 4px solid var(--vengeance-red);
+            box-shadow: 0 0 80px var(--vengeance-red), inset 0 0 100px #000;
+            overflow: hidden; 
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            
+            /* CRITICAL FIX: Re-enable pointer events so buttons work */
+            pointer-events: auto; 
+        }
+
+        .signal-circular-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.7) 60%, #000 100%);
+            z-index: 1;
+            pointer-events: none; /* Ensure overlay doesn't block clicks */
+        }
+
+        .signal-content-center {
+            position: relative;
+            z-index: 2; 
+            padding: 20px;
+        }
+
+        .signal-subtitle {
+            margin-top: 5px;
+            font-size: 1.1rem;
+            color: #ccc;
+            letter-spacing: 0.2em;
+            font-family: 'Courier Prime', monospace;
+            margin-bottom: 25px;
+        }
+
+        .contact-links-container {
+            margin-top: 20px; 
+            display: flex; 
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .contact-btn-small {
+            color: var(--vengeance-red); 
+            text-decoration: none; 
+            border: 1px solid var(--vengeance-red);
+            background: rgba(0,0,0,0.8); 
+            padding: 12px 24px; 
+            display: inline-block;
+            font-family: 'Anton', sans-serif; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            transition: 0.3s; 
+            font-size: 1rem; 
+            cursor: pointer;
+            position: relative;
+            z-index: 100; /* Force buttons to be on top */
+        }
+        .contact-btn-small:hover { 
+            background: var(--vengeance-red); 
+            color: #000; 
+            box-shadow: 0 0 25px var(--vengeance-red); 
+        }
+
+        /* --- ROAD & CAR --- */
+        .road {
+            position: absolute; bottom: 0; left: 0; width: 1000%; height: 150px;
+            background: linear-gradient(to bottom, #111 0%, #050505 100%);
+            border-top: 2px solid var(--vengeance-red); z-index: 2;
+        }
+        .road-lines {
+            position: absolute; bottom: 50%; left: 0; width: 100%; height: 4px;
+            background: repeating-linear-gradient(90deg, var(--vengeance-red) 0, var(--vengeance-red) 50px, transparent 50px, transparent 150px);
+            opacity: 0.5; box-shadow: 0 0 10px var(--vengeance-red);
+        }
+
+        .player-vehicle {
+            position: fixed; bottom: 50px; left: 5%; width: 280px; z-index: 10;
+            filter: drop-shadow(0 15px 10px rgba(0,0,0,0.9));
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .player-vehicle:hover { transform: scale(1.02); }
+        .player-vehicle::after {
+            content: "CLICK TO ENGAGE"; position: absolute; top: -30px; left: 0; width: 100%;
+            text-align: center; font-size: 0.8rem; color: var(--vengeance-red);
+            opacity: 0; transition: opacity 0.3s; background: #000; padding: 2px;
+            font-family: 'Anton', sans-serif;
+        }
+        .player-vehicle:hover::after { opacity: 1; }
+
+        /* --- HUD --- */
+        .hud-top {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--hud-bg); border-bottom: 2px solid var(--vengeance-red);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; box-sizing: border-box; z-index: 100;
+            color: var(--text-color);
+        }
+        .hud-identity { display: flex; align-items: center; gap: 15px; }
+        .hud-logo { height: 40px; width: auto; filter: drop-shadow(0 0 5px var(--vengeance-red)); }
+        .hud-name { font-family: 'Anton', sans-serif; font-size: 1.5rem; color: var(--vengeance-red); letter-spacing: 1px; }
+        .hud-status { font-family: 'Courier Prime', monospace; font-size: 0.9rem; color: var(--vengeance-red); }
+
+        .game-trigger-btn {
+            background: var(--vengeance-red); color: #000; border: none;
+            padding: 8px 20px; font-weight: bold; cursor: pointer;
+            font-family: 'Anton', sans-serif; letter-spacing: 1px; font-size: 1rem;
+            animation: pulse-btn 2s infinite; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+
+        .progress-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 5px; background: #333; z-index: 100; }
+        .progress-fill { height: 100%; background: var(--vengeance-red); width: 0%; box-shadow: 0 0 10px var(--vengeance-red); }
+
+        /* --- GAME OVERLAY --- */
+        #game-overlay {
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.98); 
+            z-index: 9999; 
+            justify-content: center; align-items: center; flex-direction: column; 
+        }
+        .game-title-text { font-family:'Anton'; font-size:3rem; color:var(--vengeance-red); margin-bottom:0; }
+        #score-board { font-size:1.5rem; color:#fff; margin-bottom:20px; font-family:'Courier Prime'; }
+        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; background: #111; padding: 15px; border: 3px solid var(--vengeance-red); box-shadow: 0 0 50px rgba(255, 0, 0, 0.5); }
+        .game-cell { width: 100px; height: 100px; background: #222; border: 1px solid #444; cursor: pointer; overflow: hidden; position: relative; }
+        .joker-active { border: 2px solid #fff; box-shadow: 0 0 15px #fff; background-image: url('assets/images/joker.png'); background-size: cover; background-position: center; animation: popIn 0.2s ease-out; }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        .shake-screen { animation: shake-anim 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake-anim { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
+        .close-game-btn { margin-top: 20px; background: transparent; color: #fff; border: 1px solid #fff; padding: 10px 30px; cursor: pointer; font-family: 'Courier Prime', monospace; }
+        .close-game-btn:hover { background: var(--vengeance-red); color: #000; }
+
+        @media (max-width: 768px) {
+            .section-marker { min-width: 85vw; margin-right: 50px; }
+            .hologram-header { font-size: 2rem; }
+            .game-cell { width: 70px; height: 70px; }
+            .hud-top { padding: 0 10px; }
+            .hud-name { font-size: 1.2rem; }
+            .hud-logo { height: 30px; }
+            .hud-status { display: none; }
+            .signal-circular-container { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; }
+            .contact-btn-small { padding: 10px 15px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-track"></div>
+    
+    <audio id="explosion-sfx" src="assets/audio/explosion-sound-effect.mp3"></audio>
+    
+    <div id="blast-layer"></div>
+
+    <div class="hud-top">
+        <div class="hud-identity">
+            <img src="assets/images/bat-red-logo.png" alt="Bat Logo" class="hud-logo">
+            <span class="hud-name">UDAYAN SHUKLA</span>
+        </div>
+        <div class="hud-status">LOC: GOTHAM // SYS: ONLINE</div>
+        <button class="game-trigger-btn" onclick="openGame()">TARGET: JOKER</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <div class="viewport">
+        <div class="bg-layer"></div>
+        <div class="flashlight-overlay" id="flashlight"></div>
+        <div class="grain-overlay"></div>
+        <div class="fog-layer-world"></div>
+
+        <div class="world-container" id="world">
+            
+            <div class="section-marker active" style="margin-right: 600px;">
+                <h1 class="hero-title">
+                    I AM<br><span style="color:var(--vengeance-red)">UDAYAN SHUKLA</span>
+                </h1>
+                <p class="hero-subtitle-text">ANALYTICS // AI // VIGILANTE</p>
+                <div style="margin-top:20px; opacity:0.7; font-family: 'Courier Prime';">▼ SCROLL TO DRIVE ▼</div>
+            </div>
+
+            <div class="section-marker">
+                <div class="hologram-panel">
+                    <div class="hologram-header">ORIGINS</div>
+                    <div class="hologram-sub">
+                        <div class="data-point">
+                            <div class="data-label">2027 (EXPECTED) // UTD, DALLAS</div>
+                            MS, Business Analytics & AI<br>
+                            Program Excellence Scholarship
+                        </div>
+                        <div class="data-point">
+                            <div class="data-label">2023 // NIT ALLAHABAD</div>
+                            B.Tech, Mechanical Engineering
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-marker">
+                <div class="hologram-panel">
+                    <div class="hologram-header">OPERATIONS</div>
+                    <div class="hologram-sub">
+                        <div class="data-point">
+                            <div class="data-label">EY // ADVANCED ANALYST</div>
+                            > Led Pharma Due Diligence.<br>
+                            > Automated validation (Python/Alteryx) reducing manual time by 40%.<br>
+                            > Deployed GenAI solutions improving efficiency by 30%.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-marker">
+                <div class="hologram-panel">
+                    <div class="hologram-header">ARSENAL</div>
+                    <div class="skill-cloud">
+                        <span class="skill-chip">Python</span>
+                        <span class="skill-chip">SQL</span>
+                        <span class="skill-chip">R</span>
+                        <span class="skill-chip">PyTorch</span>
+                        <span class="skill-chip">TensorFlow</span>
+                        <span class="skill-chip">OpenAI API</span>
+                        <span class="skill-chip">Vector DBs</span>
+                        <span class="skill-chip">AWS</span>
+                        <span class="skill-chip">Power BI</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-marker">
+                <div class="hologram-panel">
+                    <div class="hologram-header">ARCHIVES</div>
+                    <div class="hologram-sub">
+                        <a href="https://github.com/ShuklaUdayan123/VisionLanguageAction-Agent" target="_blank" class="project-link">
+                            <div class="data-point" style="margin-bottom:0; border-bottom:none;">
+                                <div class="data-label">PROJECT: 3D AI AGENT 🔗</div>
+                                Built autonomous agent for 3D task execution using AI2-THOR, LLMs & Computer Vision.
+                            </div>
+                        </a>
+                        <a href="https://github.com/ShuklaUdayan123/startup_analysis" target="_blank" class="project-link">
+                            <div class="data-point" style="margin-bottom:0; border-bottom:none;">
+                                <div class="data-label">PROJECT: STARTUP INTEL 🔗</div>
+                                Streamlit app analyzing Indian Startup funding trends (2015-2020).
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-marker">
+                <div class="signal-circular-container">
+                    <div class="signal-content-center">
+                        <h2 class="hologram-header" style="margin-bottom: 5px; text-shadow: 0 0 20px #000;">UDAYAN SHASHANK SHUKLA</h2>
+                        <div class="signal-subtitle">ENGINEER · AI · BUILDER</div>
+                        <div class="contact-links-container">
+                            <a href="mailto:shuklaudayan2001@gmail.com" class="contact-btn-small">EMAIL</a>
+                            <a href="https://leetcode.com/u/shuklaudayan2001/" target="_blank" class="contact-btn-small">LEETCODE</a>
+                            <a href="https://www.linkedin.com/in/udayan-shukla-b0b57819a/" target="_blank" class="contact-btn-small">LINKEDIN</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="road" id="road"><div class="road-lines"></div></div>
+        
+        <div class="player-vehicle" onclick="openGame()">
+            <img src="assets/images/batmobile-side.png" alt="Vehicle" style="width:100%;">
+        </div>
+    </div>
+
+    <div id="game-overlay">
+        <h2 class="game-title-text">TARGET: JOKER</h2>
+        <p style="margin-bottom:20px; color:#fff; font-family:'Courier Prime';">CLICK THE TARGETS</p>
+        <p id="score-board">SCORE: 0</p>
+        <div class="game-grid">
+            <div class="game-cell" id="cell-0" onclick="hit(0)"></div>
+            <div class="game-cell" id="cell-1" onclick="hit(1)"></div>
+            <div class="game-cell" id="cell-2" onclick="hit(2)"></div>
+            <div class="game-cell" id="cell-3" onclick="hit(3)"></div>
+            <div class="game-cell" id="cell-4" onclick="hit(4)"></div>
+            <div class="game-cell" id="cell-5" onclick="hit(5)"></div>
+            <div class="game-cell" id="cell-6" onclick="hit(6)"></div>
+            <div class="game-cell" id="cell-7" onclick="hit(7)"></div>
+            <div class="game-cell" id="cell-8" onclick="hit(8)"></div>
+        </div>
+        <button class="close-game-btn" onclick="closeGame()">ABORT MISSION</button>
+    </div>
+
+    <script>
+        // 1. FLASHLIGHT
+        const flashlight = document.getElementById('flashlight');
+        document.addEventListener('mousemove', (e) => {
+            flashlight.style.background = `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, transparent 10%, rgba(0,0,0,0.95) 35%)`;
+        });
+
+        // 2. SCROLL
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollY / maxScroll;
+            
+            const world = document.getElementById('world');
+            if (world) world.style.transform = `translateX(-${scrollY * 1.5}px)`;
+            
+            const road = document.getElementById('road');
+            if (road) road.style.transform = `translateX(-${scrollY % 100}px)`;
+            
+            const bg = document.querySelector('.bg-layer');
+            if (bg) bg.style.transform = `scale(1.1) translateX(-${scrollY * 0.1}px)`;
+            
+            const progress = document.getElementById('progress');
+            if (progress) progress.style.width = `${scrollPercent * 100}%`;
+            
+            document.querySelectorAll('.section-marker').forEach(marker => {
+                const rect = marker.getBoundingClientRect();
+                if (rect.left < window.innerWidth * 0.4 && rect.right > 0) marker.classList.add('active');
+                else marker.classList.remove('active');
+            });
+        });
+
+        // 3. GAME LOGIC
+        let score = 0, activePosition = null, timerId = null, gameActive = false;
+        const blastLayer = document.getElementById("blast-layer");
+        const sfx = document.getElementById("explosion-sfx");
+        const grid = document.querySelector(".game-grid");
+
+        function openGame() {
+            document.getElementById("game-overlay").style.display = "flex";
+            document.body.style.overflow = "hidden";
+            score = 0;
+            document.getElementById("score-board").innerText = "SCORE: " + score;
+            gameActive = true;
+            moveJoker();
+            timerId = setInterval(moveJoker, 800);
+        }
+
+        function closeGame() {
+            document.getElementById("game-overlay").style.display = "none";
+            document.body.style.overflow = "scroll";
+            gameActive = false;
+            clearInterval(timerId);
+            if(activePosition !== null) document.getElementById("cell-" + activePosition).classList.remove("joker-active");
+        }
+
+        function moveJoker() {
+            if(!gameActive) return;
+            document.querySelectorAll(".game-cell").forEach(cell => cell.classList.remove("joker-active"));
+            let randomPos = Math.floor(Math.random() * 9);
+            activePosition = randomPos;
+            document.getElementById("cell-" + randomPos).classList.add("joker-active");
+        }
+
+        function hit(id) {
+            if(!gameActive) return;
+            if (id === activePosition) {
+                score++;
+                document.getElementById("score-board").innerText = "SCORE: " + score;
+                if(sfx) {
+                    const soundClone = sfx.cloneNode();
+                    soundClone.volume = 0.5;
+                    soundClone.play().catch(e => console.log("Audio play failed", e));
+                }
+                
+                blastLayer.classList.remove("trigger-blast");
+                void blastLayer.offsetWidth; 
+                blastLayer.classList.add("trigger-blast");
+                
+                if(grid) {
+                    grid.classList.remove("shake-screen");
+                    void grid.offsetWidth;
+                    grid.classList.add("shake-screen");
+                }
+                
+                moveJoker();
+                clearInterval(timerId);
+                timerId = setInterval(moveJoker, 800);
+            }
+        }
+    </script>
+</body>
+</html>
