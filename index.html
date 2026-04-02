@@ -19,6 +19,132 @@
             --road-grey: #1a1a1a;
             --text-color: #e0e0e0;
             --hud-bg: rgba(0,0,0,0.9);
+            --accent: #ff0000;
+            --panel-bg: rgba(10, 10, 10, 0.9);
+            --panel-border: #333;
+            --body-bg: #000;
+            --card-bg: #0a0a0a;
+        }
+
+        /* === BRUCE WAYNE MODE (Light) === */
+        body.wayne-mode {
+            --vengeance-red: #1a3a5c;
+            --neon-red: #2558a0;
+            --road-grey: #e8e8e8;
+            --text-color: #2a2a2a;
+            --hud-bg: rgba(255,255,255,0.95);
+            --accent: #1a3a5c;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --panel-border: #d0d0d0;
+            --body-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            background-color: var(--body-bg);
+            cursor: default;
+        }
+        body.wayne-mode .bg-layer {
+            filter: brightness(1.2) grayscale(0) saturate(0.3);
+            background: #f0f0f0;
+        }
+        body.wayne-mode .flashlight-overlay { opacity: 0 !important; }
+        body.wayne-mode .grain-overlay { opacity: 0; }
+        body.wayne-mode .fog-layer-world { background: linear-gradient(90deg, rgba(245,245,245,0.6), transparent 40%, rgba(245,245,245,0.6)); }
+        body.wayne-mode .hud-top {
+            background: var(--hud-bg);
+            border-bottom-color: var(--accent);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+        body.wayne-mode .hud-name { color: var(--accent); }
+        body.wayne-mode .hud-status { color: var(--accent); }
+        body.wayne-mode .hud-logo { filter: brightness(0) saturate(100%); }
+        body.wayne-mode .hologram-panel {
+            background: var(--panel-bg);
+            border-color: var(--panel-border);
+            border-left-color: var(--accent);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+        }
+        body.wayne-mode .hologram-header { color: var(--accent); text-shadow: none; }
+        body.wayne-mode .hologram-sub { color: #555; }
+        body.wayne-mode .data-label { color: var(--accent); }
+        body.wayne-mode .skill-chip {
+            background: rgba(26,58,92,0.08); border-color: var(--accent); color: var(--accent);
+        }
+        body.wayne-mode .hero-title { color: #222; }
+        body.wayne-mode .hero-title span { color: var(--accent) !important; }
+        body.wayne-mode .hero-subtitle-text { color: var(--accent); }
+        body.wayne-mode .road {
+            background: linear-gradient(to bottom, #ddd 0%, #ccc 100%);
+            border-top-color: var(--accent);
+        }
+        body.wayne-mode .road-lines {
+            background: repeating-linear-gradient(90deg, var(--accent) 0, var(--accent) 50px, transparent 50px, transparent 150px);
+            box-shadow: none;
+        }
+        body.wayne-mode .progress-fill { background: var(--accent); box-shadow: none; }
+        body.wayne-mode .game-trigger-btn {
+            background: var(--accent); animation: none;
+        }
+        body.wayne-mode .resume-btn {
+            border-color: var(--accent); color: var(--accent);
+        }
+        body.wayne-mode .resume-btn:hover {
+            background: var(--accent); color: #fff;
+        }
+        body.wayne-mode .timeline-line {
+            background: linear-gradient(to bottom, var(--accent), rgba(26,58,92,0.1));
+            box-shadow: none;
+        }
+        body.wayne-mode .timeline-node {
+            background: var(--accent); box-shadow: 0 0 8px rgba(26,58,92,0.3);
+        }
+        body.wayne-mode .timeline-node.current {
+            background: #fff; border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(26,58,92,0.4);
+        }
+        body.wayne-mode .timeline-year { color: var(--accent); text-shadow: none; }
+        body.wayne-mode .timeline-title { color: #222; }
+        body.wayne-mode .timeline-badge {
+            background: rgba(26,58,92,0.1); border-color: rgba(26,58,92,0.3); color: var(--accent);
+        }
+        body.wayne-mode .signal-circular-container {
+            border-color: var(--accent);
+            box-shadow: 0 4px 40px rgba(0,0,0,0.1);
+        }
+        body.wayne-mode .contact-btn-small {
+            color: var(--accent); border-color: var(--accent); background: rgba(255,255,255,0.9);
+        }
+        body.wayne-mode .contact-btn-small:hover {
+            background: var(--accent); color: #fff; box-shadow: 0 4px 15px rgba(26,58,92,0.3);
+        }
+        body.wayne-mode .project-link:hover .data-point {
+            background: rgba(26,58,92,0.05); border-left-color: var(--accent);
+        }
+        body.wayne-mode .player-vehicle::before {
+            background: radial-gradient(ellipse at center, rgba(26,58,92,0.2) 0%, transparent 70%);
+        }
+        body.wayne-mode .player-vehicle::after {
+            opacity: 0.3;
+        }
+
+        /* Mode toggle button */
+        .mode-toggle {
+            background: transparent; border: 1px solid var(--vengeance-red);
+            color: var(--vengeance-red); padding: 6px 14px;
+            font-family: 'Courier Prime', monospace; font-size: 0.75rem;
+            cursor: pointer; transition: all 0.3s;
+            letter-spacing: 1px; white-space: nowrap;
+        }
+        .mode-toggle:hover {
+            background: var(--vengeance-red); color: #000;
+        }
+        body.wayne-mode .mode-toggle:hover {
+            color: #fff;
+        }
+
+        /* Smooth transition for everything */
+        body, body *, body *::before, body *::after {
+            transition-property: background-color, color, border-color, box-shadow, filter, opacity;
+            transition-duration: 0.4s;
+            transition-timing-function: ease;
         }
 
         html, body {
@@ -140,7 +266,16 @@
             font-size: 1.5rem; 
             color: var(--vengeance-red);
             font-family: 'Anton', sans-serif;
+            min-height: 1.5rem;
         }
+        
+        .typewriter-cursor {
+            font-family: 'Courier Prime', monospace;
+            animation: blink 1s infinite;
+            color: var(--vengeance-red);
+        }
+        body.wayne-mode .typewriter-cursor { color: var(--accent); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         .hologram-panel {
             background: rgba(10, 10, 10, 0.9);
@@ -171,6 +306,113 @@
         .data-point { margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .data-label { color: var(--vengeance-red); font-weight: bold; font-size: 0.9rem; }
         .skill-chip { background: rgba(255,0,0,0.1); border: 1px solid var(--vengeance-red); color: var(--vengeance-red); padding: 5px 15px; font-size: 0.8rem; display: inline-block; margin: 3px; }
+
+        /* --- TIMELINE --- */
+        .timeline-wrapper {
+            position: relative;
+            padding: 30px 20px 20px 50px;
+            min-height: 400px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 28px; top: 30px; bottom: 20px; width: 2px;
+            background: linear-gradient(to bottom, var(--vengeance-red), rgba(255,0,0,0.1));
+            box-shadow: 0 0 8px rgba(255,0,0,0.3);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+            padding-left: 30px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .section-marker.active .timeline-item { opacity: 1; transform: translateX(0); }
+        .section-marker.active .timeline-item:nth-child(2) { transition-delay: 0.15s; }
+        .section-marker.active .timeline-item:nth-child(3) { transition-delay: 0.3s; }
+        .section-marker.active .timeline-item:nth-child(4) { transition-delay: 0.45s; }
+
+        /* Timeline node dot */
+        .timeline-node {
+            position: absolute;
+            left: -30px; top: 4px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--vengeance-red);
+            border: 3px solid #000;
+            box-shadow: 0 0 12px var(--vengeance-red), 0 0 25px rgba(255,0,0,0.3);
+            z-index: 2;
+        }
+        .section-marker.active .timeline-node {
+            animation: node-pulse 2s ease-in-out infinite;
+        }
+        @keyframes node-pulse {
+            0%, 100% { box-shadow: 0 0 12px var(--vengeance-red), 0 0 25px rgba(255,0,0,0.3); }
+            50% { box-shadow: 0 0 18px var(--vengeance-red), 0 0 40px rgba(255,0,0,0.5); }
+        }
+        .timeline-node.current {
+            width: 20px; height: 20px;
+            left: -32px; top: 2px;
+            background: #fff;
+            border-color: var(--vengeance-red);
+            box-shadow: 0 0 15px #fff, 0 0 30px var(--vengeance-red);
+        }
+        .section-marker.active .timeline-node.current {
+            animation: node-pulse-current 1.5s ease-in-out infinite;
+        }
+        @keyframes node-pulse-current {
+            0%, 100% { box-shadow: 0 0 15px #fff, 0 0 30px var(--vengeance-red); }
+            50% { box-shadow: 0 0 25px #fff, 0 0 50px var(--vengeance-red); }
+        }
+
+        .timeline-year {
+            font-family: 'Anton', sans-serif;
+            font-size: 0.85rem;
+            color: var(--vengeance-red);
+            letter-spacing: 3px;
+            margin-bottom: 4px;
+            text-shadow: 0 0 8px rgba(255,0,0,0.4);
+        }
+        .timeline-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .timeline-subtitle {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+        .timeline-details {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: #777;
+            line-height: 1.5;
+        }
+        .timeline-details span {
+            display: block;
+            padding-left: 12px;
+            position: relative;
+        }
+        .timeline-details span::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--vengeance-red);
+        }
+        .timeline-badge {
+            display: inline-block;
+            background: rgba(255,0,0,0.15);
+            border: 1px solid rgba(255,0,0,0.4);
+            color: var(--vengeance-red);
+            padding: 2px 10px;
+            font-size: 0.65rem;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
 
         .project-link { display: block; text-decoration: none; color: inherit; transition: all 0.2s; margin-bottom: 15px; }
         .project-link .data-point { border-bottom: 1px solid #444; transition: background 0.2s, padding-left 0.2s; }
@@ -263,19 +505,77 @@
             opacity: 0.5; box-shadow: 0 0 10px var(--vengeance-red);
         }
 
+        /* --- VEHICLE PARTICLE CANVAS --- */
+        #vehicle-particles {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%; height: 250px;
+            z-index: 9;
+            pointer-events: none;
+        }
+
         .player-vehicle {
             position: fixed; bottom: 50px; left: 5%; width: 280px; z-index: 10;
             filter: drop-shadow(0 15px 10px rgba(0,0,0,0.9));
-            cursor: pointer; transition: transform 0.1s;
+            cursor: pointer;
+            animation: vehicle-hover 2.5s ease-in-out infinite;
         }
-        .player-vehicle:hover { transform: scale(1.02); }
+
+        /* Floating hover animation */
+        @keyframes vehicle-hover {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .player-vehicle:hover {
+            animation: vehicle-hover 1.5s ease-in-out infinite;
+        }
+
+        /* Underglow effect */
+        .player-vehicle::before {
+            content: '';
+            position: absolute;
+            bottom: -18px; left: 15%; width: 70%; height: 20px;
+            background: radial-gradient(ellipse at center, rgba(255, 0, 0, 0.6) 0%, rgba(255, 50, 0, 0.3) 40%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(8px);
+            animation: underglow-pulse 2s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes underglow-pulse {
+            0% { opacity: 0.5; transform: scaleX(0.9); }
+            100% { opacity: 1; transform: scaleX(1.1); }
+        }
+
+        /* Exhaust flame */
         .player-vehicle::after {
-            content: "CLICK TO ENGAGE"; position: absolute; top: -30px; left: 0; width: 100%;
-            text-align: center; font-size: 0.8rem; color: var(--vengeance-red);
-            opacity: 0; transition: opacity 0.3s; background: #000; padding: 2px;
-            font-family: 'Anton', sans-serif;
+            content: '';
+            position: absolute;
+            bottom: 28%; left: -25px;
+            width: 40px; height: 12px;
+            background: linear-gradient(to left, rgba(255, 80, 0, 0.9), rgba(255, 200, 50, 0.7), transparent);
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: exhaust-flicker 0.15s ease-in-out infinite alternate;
+            z-index: -1;
         }
-        .player-vehicle:hover::after { opacity: 1; }
+
+        @keyframes exhaust-flicker {
+            0% { opacity: 0.6; transform: scaleX(0.7) scaleY(0.8) translateX(0px); }
+            50% { opacity: 1; transform: scaleX(1.3) scaleY(1.2) translateX(-5px); }
+            100% { opacity: 0.8; transform: scaleX(1) scaleY(0.9) translateX(-2px); }
+        }
+
+        /* Click label on hover */
+        .vehicle-label {
+            position: absolute; top: -30px; left: 0; width: 100%;
+            text-align: center; font-size: 0.8rem; color: var(--vengeance-red);
+            opacity: 0; transition: opacity 0.3s; background: rgba(0,0,0,0.8); padding: 4px;
+            font-family: 'Anton', sans-serif; letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--vengeance-red);
+        }
+        .player-vehicle:hover .vehicle-label { opacity: 1; }
 
         /* --- HUD --- */
         .hud-top {
@@ -297,6 +597,20 @@
             animation: pulse-btn 2s infinite; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
         @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+
+        .resume-btn {
+            background: transparent; color: var(--vengeance-red); border: 2px solid var(--vengeance-red);
+            padding: 8px 20px; font-weight: bold; cursor: pointer;
+            font-family: 'Anton', sans-serif; letter-spacing: 1px; font-size: 1rem;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s;
+        }
+        .resume-btn:hover {
+            background: var(--vengeance-red); color: #000;
+            box-shadow: 0 0 25px rgba(255,0,0,0.5);
+        }
+        .hud-actions { display: flex; gap: 10px; align-items: center; }
 
         .progress-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 5px; background: #333; z-index: 100; }
         .progress-fill { height: 100%; background: var(--vengeance-red); width: 0%; box-shadow: 0 0 10px var(--vengeance-red); }
@@ -321,6 +635,180 @@
         .close-game-btn { margin-top: 20px; background: transparent; color: #fff; border: 1px solid #fff; padding: 10px 30px; cursor: pointer; font-family: 'Courier Prime', monospace; }
         .close-game-btn:hover { background: var(--vengeance-red); color: #000; }
 
+        /* --- LOGIN MODAL --- */
+        #login-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 10000;
+            justify-content: center; align-items: center; flex-direction: column;
+        }
+        #login-modal.active { display: flex; }
+        .login-box {
+            background: #0a0a0a; border: 2px solid var(--vengeance-red);
+            padding: 50px 40px; max-width: 400px; width: 90%;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+            box-shadow: 0 0 60px rgba(255,0,0,0.3), inset 0 0 30px rgba(255,0,0,0.05);
+            position: relative;
+        }
+        .login-box::before {
+            content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+            background: linear-gradient(135deg, var(--vengeance-red), transparent 40%, transparent 60%, var(--vengeance-red));
+            z-index: -1; opacity: 0.3;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+        .login-title {
+            font-family: 'Anton', sans-serif; font-size: 2rem; color: var(--vengeance-red);
+            text-transform: uppercase; margin-bottom: 8px; text-shadow: 0 0 15px rgba(255,0,0,0.5);
+        }
+        .login-subtitle {
+            font-family: 'Courier Prime', monospace; font-size: 0.85rem; color: #666;
+            margin-bottom: 30px; letter-spacing: 2px;
+        }
+        .login-input {
+            width: 100%; padding: 14px 18px; background: #111; border: 1px solid #333;
+            color: var(--vengeance-red); font-family: 'Courier Prime', monospace; font-size: 1rem;
+            box-sizing: border-box; outline: none; transition: border-color 0.3s;
+            letter-spacing: 3px;
+        }
+        .login-input:focus { border-color: var(--vengeance-red); box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+        .login-input::placeholder { color: #444; letter-spacing: 1px; }
+        .login-btn {
+            width: 100%; padding: 14px; background: var(--vengeance-red); color: #000;
+            border: none; font-family: 'Anton', sans-serif; font-size: 1.1rem;
+            letter-spacing: 2px; cursor: pointer; margin-top: 15px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.2s;
+        }
+        .login-btn:hover { box-shadow: 0 0 25px var(--vengeance-red); transform: scale(1.02); }
+        .login-error {
+            color: var(--vengeance-red); font-size: 0.85rem; margin-top: 12px;
+            font-family: 'Courier Prime', monospace; min-height: 20px; text-align: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .login-error.show { opacity: 1; animation: shake-anim 0.3s; }
+        .login-close {
+            position: absolute; top: 15px; right: 20px; background: none; border: none;
+            color: #555; font-size: 1.5rem; cursor: pointer; font-family: 'Courier Prime';
+            transition: color 0.2s;
+        }
+        .login-close:hover { color: var(--vengeance-red); }
+
+        /* --- ADMIN PANEL --- */
+        #admin-panel {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.97); z-index: 10001;
+            overflow-y: auto;
+        }
+        #admin-panel.active { display: block; }
+        .admin-container {
+            max-width: 800px; margin: 0 auto; padding: 30px 20px 60px;
+        }
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--vengeance-red); padding-bottom: 20px; margin-bottom: 30px;
+        }
+        .admin-title {
+            font-family: 'Anton', sans-serif; font-size: 2.5rem; color: var(--vengeance-red);
+            text-shadow: 0 0 20px rgba(255,0,0,0.4);
+        }
+        .admin-header-actions { display: flex; gap: 10px; }
+        .admin-btn {
+            padding: 10px 20px; font-family: 'Anton', sans-serif; font-size: 0.9rem;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.2s; border: none;
+            text-transform: uppercase;
+        }
+        .admin-btn-primary {
+            background: var(--vengeance-red); color: #000;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+        }
+        .admin-btn-primary:hover { box-shadow: 0 0 20px var(--vengeance-red); }
+        .admin-btn-secondary {
+            background: transparent; color: var(--vengeance-red); border: 1px solid var(--vengeance-red);
+        }
+        .admin-btn-secondary:hover { background: rgba(255,0,0,0.1); }
+        .admin-btn-danger {
+            background: transparent; color: #ff4444; border: 1px solid #ff4444;
+        }
+        .admin-btn-danger:hover { background: rgba(255,68,68,0.1); }
+        .admin-btn-small { padding: 6px 14px; font-size: 0.75rem; }
+
+        /* Add/Edit Form */
+        .admin-form {
+            background: #0a0a0a; border: 1px solid #222; border-left: 4px solid var(--vengeance-red);
+            padding: 30px; margin-bottom: 30px;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        }
+        .admin-form-title {
+            font-family: 'Anton', sans-serif; font-size: 1.4rem; color: var(--vengeance-red);
+            margin-bottom: 20px; text-transform: uppercase;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-label {
+            display: block; font-family: 'Courier Prime', monospace; font-size: 0.8rem;
+            color: var(--vengeance-red); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .form-input {
+            width: 100%; padding: 12px 15px; background: #111; border: 1px solid #333;
+            color: #e0e0e0; font-family: 'Courier Prime', monospace; font-size: 0.95rem;
+            box-sizing: border-box; outline: none; transition: border-color 0.3s;
+        }
+        .form-input:focus { border-color: var(--vengeance-red); }
+        .form-textarea { min-height: 80px; resize: vertical; }
+        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+        /* Project List */
+        .admin-section-title {
+            font-family: 'Anton', sans-serif; font-size: 1.3rem; color: #888;
+            margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .admin-project-item {
+            background: #0d0d0d; border: 1px solid #222; padding: 20px;
+            margin-bottom: 12px; display: flex; justify-content: space-between;
+            align-items: flex-start; transition: border-color 0.2s;
+        }
+        .admin-project-item:hover { border-color: #444; }
+        .admin-project-info { flex: 1; margin-right: 15px; }
+        .admin-project-name {
+            font-family: 'Anton', sans-serif; font-size: 1.1rem; color: var(--vengeance-red);
+            margin-bottom: 5px;
+        }
+        .admin-project-desc {
+            font-family: 'Courier Prime', monospace; font-size: 0.85rem; color: #888;
+            margin-bottom: 5px;
+        }
+        .admin-project-url {
+            font-family: 'Courier Prime', monospace; font-size: 0.75rem; color: #555;
+            word-break: break-all;
+        }
+        .admin-project-tags { margin-top: 8px; }
+        .admin-tag {
+            display: inline-block; background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.3);
+            color: var(--vengeance-red); padding: 2px 10px; font-size: 0.7rem;
+            font-family: 'Courier Prime'; margin: 2px;
+        }
+        .admin-project-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .admin-empty {
+            text-align: center; padding: 40px; color: #444;
+            font-family: 'Courier Prime', monospace; font-style: italic;
+        }
+
+        /* Import/Export */
+        .admin-io-section {
+            margin-top: 30px; padding-top: 20px; border-top: 1px solid #222;
+            display: flex; gap: 10px; align-items: center;
+        }
+        .admin-io-section .admin-btn { flex-shrink: 0; }
+        #import-file-input { display: none; }
+
+        /* Toast notification */
+        .admin-toast {
+            position: fixed; bottom: 30px; right: 30px; background: #111;
+            border: 1px solid var(--vengeance-red); color: #fff; padding: 15px 25px;
+            font-family: 'Courier Prime', monospace; font-size: 0.9rem; z-index: 10002;
+            transform: translateY(100px); opacity: 0; transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(255,0,0,0.3);
+        }
+        .admin-toast.show { transform: translateY(0); opacity: 1; }
+
         @media (max-width: 768px) {
             .section-marker { min-width: 85vw; margin-right: 50px; }
             .hologram-header { font-size: 2rem; }
@@ -331,6 +819,10 @@
             .hud-status { display: none; }
             .signal-circular-container { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; }
             .contact-btn-small { padding: 10px 15px; font-size: 0.8rem; }
+            .admin-project-item { flex-direction: column; }
+            .admin-project-actions { margin-top: 12px; }
+            .admin-header { flex-direction: column; gap: 15px; text-align: center; }
+            .login-box { padding: 30px 25px; }
         }
     </style>
 </head>
@@ -344,11 +836,15 @@
 
     <div class="hud-top">
         <div class="hud-identity">
-            <img src="assets/images/bat-red-logo.png" alt="Bat Logo" class="hud-logo">
+            <img src="assets/images/bat-red-logo.png" alt="Bat Logo" class="hud-logo" id="bat-logo-trigger">
             <span class="hud-name">UDAYAN SHUKLA</span>
         </div>
         <div class="hud-status">LOC: GOTHAM // SYS: ONLINE</div>
-        <button class="game-trigger-btn" onclick="openGame()">TARGET: JOKER</button>
+        <div class="hud-actions">
+            <button class="mode-toggle" id="mode-toggle" onclick="toggleMode()">WAYNE</button>
+            <a href="assets/Resume/Udayan_Resume_V8.pdf" download class="resume-btn">&#9660; RESUME</a>
+            <button class="game-trigger-btn" onclick="openGame()">TARGET: JOKER</button>
+        </div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
 
@@ -364,37 +860,52 @@
                 <h1 class="hero-title">
                     I AM<br><span style="color:var(--vengeance-red)">UDAYAN SHUKLA</span>
                 </h1>
-                <p class="hero-subtitle-text">ANALYTICS // AI // VIGILANTE</p>
+                <p class="hero-subtitle-text">
+                    <span id="typewriter-text"></span><span class="typewriter-cursor">_</span>
+                </p>
                 <div style="margin-top:20px; opacity:0.7; font-family: 'Courier Prime';">▼ SCROLL TO DRIVE ▼</div>
             </div>
 
-            <div class="section-marker">
+            <div class="section-marker" style="min-width:650px;">
                 <div class="hologram-panel">
-                    <div class="hologram-header">ORIGINS</div>
-                    <div class="hologram-sub">
-                        <div class="data-point">
-                            <div class="data-label">2027 (EXPECTED) // UTD, DALLAS</div>
-                            MS, Business Analytics & AI<br>
-                            Program Excellence Scholarship
-                        </div>
-                        <div class="data-point">
-                            <div class="data-label">2023 // NIT ALLAHABAD</div>
-                            B.Tech, Mechanical Engineering
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    <div class="hologram-header">THE JOURNEY</div>
+                    <div class="timeline-wrapper">
+                        <div class="timeline-line"></div>
 
-            <div class="section-marker">
-                <div class="hologram-panel">
-                    <div class="hologram-header">OPERATIONS</div>
-                    <div class="hologram-sub">
-                        <div class="data-point">
-                            <div class="data-label">EY // ADVANCED ANALYST</div>
-                            > Led Pharma Due Diligence.<br>
-                            > Automated validation (Python/Alteryx) reducing manual time by 40%.<br>
-                            > Deployed GenAI solutions improving efficiency by 30%.
+                        <div class="timeline-item">
+                            <div class="timeline-node current"></div>
+                            <div class="timeline-year">2025 — 2027</div>
+                            <div class="timeline-title">UT DALLAS</div>
+                            <div class="timeline-subtitle">MS, Business Analytics & AI</div>
+                            <div class="timeline-details">
+                                <span>Program Excellence Scholarship</span>
+                                <span>Focus: Machine Learning, NLP, Computer Vision</span>
+                            </div>
+                            <div class="timeline-badge">IN PROGRESS</div>
                         </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-year">2023 — 2025</div>
+                            <div class="timeline-title">ERNST & YOUNG (EY)</div>
+                            <div class="timeline-subtitle">Advanced Analyst — Strategy & Transactions</div>
+                            <div class="timeline-details">
+                                <span>Led Pharma Due Diligence engagements</span>
+                                <span>Automated validation (Python/Alteryx) — 40% time reduction</span>
+                                <span>Deployed GenAI solutions — 30% efficiency gain</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-year">2019 — 2023</div>
+                            <div class="timeline-title">NIT ALLAHABAD</div>
+                            <div class="timeline-subtitle">B.Tech, Mechanical Engineering</div>
+                            <div class="timeline-details">
+                                <span>Motilal Nehru National Institute of Technology</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -419,19 +930,8 @@
             <div class="section-marker">
                 <div class="hologram-panel">
                     <div class="hologram-header">ARCHIVES</div>
-                    <div class="hologram-sub">
-                        <a href="https://github.com/ShuklaUdayan123/VisionLanguageAction-Agent" target="_blank" class="project-link">
-                            <div class="data-point" style="margin-bottom:0; border-bottom:none;">
-                                <div class="data-label">PROJECT: 3D AI AGENT 🔗</div>
-                                Built autonomous agent for 3D task execution using AI2-THOR, LLMs & Computer Vision.
-                            </div>
-                        </a>
-                        <a href="https://github.com/ShuklaUdayan123/startup_analysis" target="_blank" class="project-link">
-                            <div class="data-point" style="margin-bottom:0; border-bottom:none;">
-                                <div class="data-label">PROJECT: STARTUP INTEL 🔗</div>
-                                Streamlit app analyzing Indian Startup funding trends (2015-2020).
-                            </div>
-                        </a>
+                    <div class="hologram-sub" id="archives-container">
+                        <!-- Projects rendered dynamically by JS -->
                     </div>
                 </div>
             </div>
@@ -454,7 +954,10 @@
 
         <div class="road" id="road"><div class="road-lines"></div></div>
         
+        <canvas id="vehicle-particles"></canvas>
+
         <div class="player-vehicle" onclick="openGame()">
+            <span class="vehicle-label">CLICK TO ENGAGE</span>
             <img src="assets/images/batmobile-side.png" alt="Vehicle" style="width:100%;">
         </div>
     </div>
@@ -477,7 +980,525 @@
         <button class="close-game-btn" onclick="closeGame()">ABORT MISSION</button>
     </div>
 
+    <!-- LOGIN MODAL -->
+    <div id="login-modal">
+        <div class="login-box">
+            <button class="login-close" onclick="closeLogin()">&times;</button>
+            <div class="login-title">BATCAVE ACCESS</div>
+            <div class="login-subtitle">// AUTHORIZED PERSONNEL ONLY</div>
+            <input type="password" class="login-input" id="login-password" placeholder="ENTER PASSKEY..." autocomplete="off">
+            <button class="login-btn" id="login-submit" onclick="attemptLogin()">AUTHENTICATE</button>
+            <div class="login-error" id="login-error">ACCESS DENIED — INVALID CREDENTIALS</div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="admin-panel">
+        <div class="admin-container">
+            <div class="admin-header">
+                <div class="admin-title">BATCAVE CONTROL</div>
+                <div class="admin-header-actions">
+                    <button class="admin-btn admin-btn-secondary" onclick="closeAdmin()">✕ EXIT</button>
+                    <button class="admin-btn admin-btn-danger" onclick="adminLogout()">LOGOUT</button>
+                </div>
+            </div>
+
+            <!-- Add/Edit Form -->
+            <div class="admin-form" id="project-form">
+                <div class="admin-form-title" id="form-title">➕ NEW PROJECT</div>
+                <input type="hidden" id="edit-project-id" value="">
+                <div class="form-group">
+                    <label class="form-label">Project Name</label>
+                    <input type="text" class="form-input" id="proj-name" placeholder="e.g. 3D AI Agent">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input form-textarea" id="proj-desc" placeholder="What does this project do?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">URL (GitHub / Live Link)</label>
+                    <input type="text" class="form-input" id="proj-url" placeholder="https://github.com/...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tags (comma-separated)</label>
+                    <input type="text" class="form-input" id="proj-tags" placeholder="Python, AI, Computer Vision">
+                </div>
+                <div class="form-actions">
+                    <button class="admin-btn admin-btn-primary" onclick="saveProject()">SAVE PROJECT</button>
+                    <button class="admin-btn admin-btn-secondary" onclick="resetForm()" id="cancel-edit-btn" style="display:none;">CANCEL</button>
+                </div>
+            </div>
+
+            <!-- Project List -->
+            <div class="admin-section-title">📋 YOUR PROJECTS</div>
+            <div id="admin-project-list"></div>
+
+            <!-- Import/Export -->
+            <div class="admin-io-section">
+                <button class="admin-btn admin-btn-secondary" onclick="exportProjects()">📤 EXPORT JSON</button>
+                <button class="admin-btn admin-btn-secondary" onclick="document.getElementById('import-file-input').click()">📥 IMPORT JSON</button>
+                <input type="file" id="import-file-input" accept=".json" onchange="importProjects(event)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="admin-toast" id="admin-toast"></div>
+
     <script>
+        // 0. VEHICLE PARTICLE SYSTEM
+        (function() {
+            const canvas = document.getElementById('vehicle-particles');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let lastScrollY = 0;
+            let scrollSpeed = 0;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = 250;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor(x, y, type) {
+                    this.x = x;
+                    this.y = y;
+                    this.type = type; // 'spark', 'speed', 'smoke'
+                    if (type === 'spark') {
+                        this.vx = -(Math.random() * 6 + 3);
+                        this.vy = (Math.random() - 0.5) * 3;
+                        this.life = 1;
+                        this.decay = Math.random() * 0.04 + 0.02;
+                        this.size = Math.random() * 3 + 1;
+                        this.color = Math.random() > 0.5 ? [255, 80, 0] : [255, 200, 50];
+                    } else if (type === 'speed') {
+                        this.vx = -(Math.random() * 12 + 8);
+                        this.vy = 0;
+                        this.life = 1;
+                        this.decay = Math.random() * 0.03 + 0.02;
+                        this.size = Math.random() * 1.5 + 0.5;
+                        this.length = Math.random() * 40 + 20;
+                        this.color = [255, 0, 0];
+                    } else if (type === 'smoke') {
+                        this.vx = -(Math.random() * 2 + 1);
+                        this.vy = -(Math.random() * 0.5 + 0.2);
+                        this.life = 1;
+                        this.decay = Math.random() * 0.015 + 0.008;
+                        this.size = Math.random() * 8 + 4;
+                        this.color = [100, 100, 100];
+                    }
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.life -= this.decay;
+                    if (this.type === 'smoke') this.size += 0.3;
+                }
+                draw(ctx) {
+                    if (this.life <= 0) return;
+                    ctx.globalAlpha = this.life;
+                    if (this.type === 'speed') {
+                        ctx.strokeStyle = `rgba(${this.color.join(',')}, ${this.life})`;
+                        ctx.lineWidth = this.size;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, this.y);
+                        ctx.lineTo(this.x + this.length, this.y);
+                        ctx.stroke();
+                    } else {
+                        ctx.fillStyle = `rgba(${this.color.join(',')}, ${this.life})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            // Get vehicle position
+            function getVehicleRect() {
+                const vehicle = document.querySelector('.player-vehicle');
+                if (!vehicle) return null;
+                return vehicle.getBoundingClientRect();
+            }
+
+            function spawnParticles() {
+                const rect = getVehicleRect();
+                if (!rect) return;
+
+                const scrollDelta = Math.abs(window.scrollY - lastScrollY);
+                scrollSpeed = scrollDelta;
+                lastScrollY = window.scrollY;
+
+                // Exhaust X/Y relative to canvas
+                const exhaustX = rect.left + 10;
+                const exhaustY = canvas.height - (window.innerHeight - rect.bottom) - rect.height * 0.45;
+
+                // Always emit some idle exhaust sparks
+                if (Math.random() > 0.4) {
+                    particles.push(new Particle(exhaustX, exhaustY, 'spark'));
+                }
+                // Idle smoke
+                if (Math.random() > 0.7) {
+                    particles.push(new Particle(exhaustX - 5, exhaustY, 'smoke'));
+                }
+
+                // Scrolling = driving faster
+                if (scrollDelta > 2) {
+                    const intensity = Math.min(scrollDelta / 5, 8);
+                    for (let i = 0; i < intensity; i++) {
+                        particles.push(new Particle(exhaustX, exhaustY + (Math.random() - 0.5) * 6, 'spark'));
+                    }
+                    // Speed lines across the bottom area
+                    for (let i = 0; i < intensity * 0.5; i++) {
+                        const lineY = canvas.height - Math.random() * 80 - 20;
+                        const lineX = Math.random() * canvas.width;
+                        particles.push(new Particle(lineX, lineY, 'speed'));
+                    }
+                    // Extra smoke when driving
+                    if (Math.random() > 0.3) {
+                        particles.push(new Particle(exhaustX - 10, exhaustY + (Math.random() - 0.5) * 4, 'smoke'));
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                spawnParticles();
+
+                particles = particles.filter(p => p.life > 0);
+                // Cap particles
+                if (particles.length > 300) particles.splice(0, particles.length - 300);
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw(ctx);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // === MODE TOGGLE ===
+        function toggleMode() {
+            const body = document.body;
+            const btn = document.getElementById('mode-toggle');
+            body.classList.toggle('wayne-mode');
+            const isWayne = body.classList.contains('wayne-mode');
+            btn.textContent = isWayne ? 'BATMAN' : 'WAYNE';
+        }
+
+        // === ADMIN SYSTEM ===
+        const PASS_HASH = 'a1c9d04af1560e78841840057119e90df6406b0b39d31ee264b8f5d068c9e884';
+        const STORAGE_KEY = 'gotham_projects';
+        const AUTH_KEY = 'gotham_auth';
+
+        // Default projects (your originals)
+        const DEFAULT_PROJECTS = [
+            {
+                id: 'default_1',
+                name: '3D AI AGENT',
+                description: 'Built autonomous agent for 3D task execution using AI2-THOR, LLMs & Computer Vision.',
+                url: 'https://github.com/ShuklaUdayan123/VisionLanguageAction-Agent',
+                tags: ['AI', '3D', 'Computer Vision', 'LLMs'],
+                isDefault: true
+            },
+            {
+                id: 'default_2',
+                name: 'STARTUP INTEL',
+                description: 'Streamlit app analyzing Indian Startup funding trends (2015-2020).',
+                url: 'https://github.com/ShuklaUdayan123/startup_analysis',
+                tags: ['Python', 'Streamlit', 'Analytics'],
+                isDefault: true
+            }
+        ];
+
+        // SHA-256 hash function
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Get all projects (defaults + localStorage)
+        function getAllProjects() {
+            const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            return [...DEFAULT_PROJECTS, ...stored];
+        }
+
+        // Get user-added projects only
+        function getUserProjects() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }
+
+        // Save user projects to localStorage
+        function saveUserProjects(projects) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        }
+
+        // Render projects in the ARCHIVES section
+        function renderArchives() {
+            const container = document.getElementById('archives-container');
+            if (!container) return;
+            const projects = getAllProjects();
+            if (projects.length === 0) {
+                container.innerHTML = '<div style="color:#555; font-style:italic;">No projects yet.</div>';
+                return;
+            }
+            container.innerHTML = projects.map(p => `
+                <a href="${p.url}" target="_blank" class="project-link">
+                    <div class="data-point" style="margin-bottom:0; border-bottom:none;">
+                        <div class="data-label">PROJECT: ${p.name.toUpperCase()} 🔗</div>
+                        ${p.description}
+                        ${p.tags && p.tags.length ? '<div style="margin-top:5px;">' + p.tags.map(t => '<span class="skill-chip" style="font-size:0.7rem; padding:2px 8px;">' + t + '</span>').join('') + '</div>' : ''}
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Triple-click bat logo to open login
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+        document.getElementById('bat-logo-trigger').addEventListener('click', function(e) {
+            e.stopPropagation();
+            logoClickCount++;
+            clearTimeout(logoClickTimer);
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 600);
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+                    openAdmin();
+                } else {
+                    openLogin();
+                }
+            }
+        });
+
+        function openLogin() {
+            document.getElementById('login-modal').classList.add('active');
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').classList.remove('show');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('login-password').focus(), 100);
+        }
+
+        function closeLogin() {
+            document.getElementById('login-modal').classList.remove('active');
+            document.body.style.overflow = 'scroll';
+        }
+
+        async function attemptLogin() {
+            const pwd = document.getElementById('login-password').value;
+            const hash = await sha256(pwd);
+            if (hash === PASS_HASH) {
+                sessionStorage.setItem(AUTH_KEY, 'true');
+                closeLogin();
+                openAdmin();
+                showToast('ACCESS GRANTED — WELCOME BACK');
+            } else {
+                const err = document.getElementById('login-error');
+                err.classList.remove('show');
+                void err.offsetWidth;
+                err.classList.add('show');
+            }
+        }
+
+        // Enter key on password field
+        document.getElementById('login-password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') attemptLogin();
+        });
+
+        function openAdmin() {
+            document.getElementById('admin-panel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderAdminList();
+            resetForm();
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-panel').classList.remove('active');
+            document.body.style.overflow = 'scroll';
+            renderArchives(); // Refresh public view
+        }
+
+        function adminLogout() {
+            sessionStorage.removeItem(AUTH_KEY);
+            closeAdmin();
+            showToast('LOGGED OUT — SESSION TERMINATED');
+        }
+
+        // Render admin project list
+        function renderAdminList() {
+            const list = document.getElementById('admin-project-list');
+            const allProjects = getAllProjects();
+            if (allProjects.length === 0) {
+                list.innerHTML = '<div class="admin-empty">No projects yet. Add your first one above.</div>';
+                return;
+            }
+            list.innerHTML = allProjects.map(p => `
+                <div class="admin-project-item">
+                    <div class="admin-project-info">
+                        <div class="admin-project-name">${p.name}${p.isDefault ? ' <span style="color:#555; font-size:0.7rem;">[DEFAULT]</span>' : ''}</div>
+                        <div class="admin-project-desc">${p.description}</div>
+                        <div class="admin-project-url">${p.url}</div>
+                        ${p.tags && p.tags.length ? '<div class="admin-project-tags">' + p.tags.map(t => '<span class="admin-tag">' + t + '</span>').join('') + '</div>' : ''}
+                    </div>
+                    <div class="admin-project-actions">
+                        <button class="admin-btn admin-btn-secondary admin-btn-small" onclick="editProject('${p.id}')" ${p.isDefault ? '' : ''}>EDIT</button>
+                        <button class="admin-btn admin-btn-danger admin-btn-small" onclick="deleteProject('${p.id}')" ${p.isDefault ? 'title="Removes from view (can restore via import)"' : ''}>DELETE</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Save (add or edit) a project
+        function saveProject() {
+            const name = document.getElementById('proj-name').value.trim();
+            const desc = document.getElementById('proj-desc').value.trim();
+            const url = document.getElementById('proj-url').value.trim();
+            const tagsRaw = document.getElementById('proj-tags').value.trim();
+            const editId = document.getElementById('edit-project-id').value;
+
+            if (!name || !desc) {
+                showToast('⚠ NAME AND DESCRIPTION REQUIRED');
+                return;
+            }
+
+            const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(t => t) : [];
+            const userProjects = getUserProjects();
+
+            if (editId) {
+                // Check if editing a default project
+                const defIdx = DEFAULT_PROJECTS.findIndex(p => p.id === editId);
+                if (defIdx !== -1) {
+                    // Update default in-memory (won't persist across reloads, but we'll save as user project)
+                    DEFAULT_PROJECTS[defIdx] = { ...DEFAULT_PROJECTS[defIdx], name, description: desc, url, tags };
+                } else {
+                    const idx = userProjects.findIndex(p => p.id === editId);
+                    if (idx !== -1) {
+                        userProjects[idx] = { ...userProjects[idx], name, description: desc, url, tags };
+                    }
+                }
+                saveUserProjects(userProjects);
+                showToast('PROJECT UPDATED');
+            } else {
+                const newProject = {
+                    id: 'proj_' + Date.now(),
+                    name, description: desc, url: url || '#', tags,
+                    isDefault: false
+                };
+                userProjects.push(newProject);
+                saveUserProjects(userProjects);
+                showToast('PROJECT ADDED TO ARCHIVES');
+            }
+
+            resetForm();
+            renderAdminList();
+            renderArchives();
+        }
+
+        function editProject(id) {
+            const all = getAllProjects();
+            const proj = all.find(p => p.id === id);
+            if (!proj) return;
+            document.getElementById('proj-name').value = proj.name;
+            document.getElementById('proj-desc').value = proj.description;
+            document.getElementById('proj-url').value = proj.url;
+            document.getElementById('proj-tags').value = (proj.tags || []).join(', ');
+            document.getElementById('edit-project-id').value = id;
+            document.getElementById('form-title').textContent = '✏️ EDITING: ' + proj.name;
+            document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+            document.getElementById('project-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteProject(id) {
+            if (!confirm('Delete this project?')) return;
+            // If default, remove from defaults array
+            const defIdx = DEFAULT_PROJECTS.findIndex(p => p.id === id);
+            if (defIdx !== -1) {
+                DEFAULT_PROJECTS.splice(defIdx, 1);
+                // Also save removal to localStorage
+                const removed = JSON.parse(localStorage.getItem('gotham_removed_defaults') || '[]');
+                removed.push(id);
+                localStorage.setItem('gotham_removed_defaults', JSON.stringify(removed));
+            } else {
+                const userProjects = getUserProjects();
+                const filtered = userProjects.filter(p => p.id !== id);
+                saveUserProjects(filtered);
+            }
+            renderAdminList();
+            renderArchives();
+            showToast('PROJECT REMOVED');
+        }
+
+        function resetForm() {
+            document.getElementById('proj-name').value = '';
+            document.getElementById('proj-desc').value = '';
+            document.getElementById('proj-url').value = '';
+            document.getElementById('proj-tags').value = '';
+            document.getElementById('edit-project-id').value = '';
+            document.getElementById('form-title').textContent = '➕ NEW PROJECT';
+            document.getElementById('cancel-edit-btn').style.display = 'none';
+        }
+
+        // Export/Import
+        function exportProjects() {
+            const data = { projects: getAllProjects(), exportedAt: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'gotham-projects-' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showToast('PROJECTS EXPORTED');
+        }
+
+        function importProjects(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    const projects = data.projects || data;
+                    if (!Array.isArray(projects)) throw new Error('Invalid format');
+                    // Separate defaults and user projects
+                    const userOnly = projects.filter(p => !p.isDefault);
+                    saveUserProjects(userOnly);
+                    // Restore any defaults
+                    localStorage.removeItem('gotham_removed_defaults');
+                    renderAdminList();
+                    renderArchives();
+                    showToast(`IMPORTED ${projects.length} PROJECTS`);
+                } catch(err) {
+                    showToast('⚠ IMPORT FAILED — INVALID FILE');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset input
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('admin-toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // On page load: remove deleted defaults and render archives
+        (function initProjects() {
+            const removedDefaults = JSON.parse(localStorage.getItem('gotham_removed_defaults') || '[]');
+            removedDefaults.forEach(id => {
+                const idx = DEFAULT_PROJECTS.findIndex(p => p.id === id);
+                if (idx !== -1) DEFAULT_PROJECTS.splice(idx, 1);
+            });
+            renderArchives();
+        })();
+
         // 1. FLASHLIGHT
         const flashlight = document.getElementById('flashlight');
         document.addEventListener('mousemove', (e) => {
@@ -567,6 +1588,45 @@
                 timerId = setInterval(moveJoker, 800);
             }
         }
+
+        // 4. TYPEWRITER EFFECT
+        const phrases = [
+            "ANALYTICS // AI // VIGILANTE",
+            "BUILDING INTELLIGENT SYSTEMS",
+            "DATA DRIVEN DECISIONS",
+            "ENGINEERING // STRATEGY // IMPACT"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const textElement = document.getElementById("typewriter-text");
+
+        function typeLoop() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.innerText = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.innerText = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 30 : 100 + Math.random() * 50;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeLoop, typeSpeed);
+        }
+
+        setTimeout(typeLoop, 1000);
     </script>
 </body>
 </html>
