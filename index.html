@@ -1312,6 +1312,11 @@
         });
 
         function openAdmin() {
+            if (sessionStorage.getItem(AUTH_KEY) !== 'true') {
+                console.error("Unauthorized access.");
+                openLogin();
+                return;
+            }
             document.getElementById('admin-panel').classList.add('active');
             document.body.style.overflow = 'hidden';
             renderAdminList();
